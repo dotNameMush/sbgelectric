@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       routes: appRoutes,
-      title: 'Newline',
+      title: 'SBG Electric',
       theme: appTheme,
     );
   }

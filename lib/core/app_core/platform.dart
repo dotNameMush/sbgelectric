@@ -6,7 +6,7 @@ import 'package:sbgelectric/webview/home.dart';
 import '../shared/error.dart';
 
 class PlatformCheck extends StatelessWidget {
-  PlatformCheck({Key? key}) : super(key: key);
+  const PlatformCheck({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     var device = Theme.of(context).platform;
