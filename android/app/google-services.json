@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "624279043141",
+    "project_id": "sbg-electric",
+    "storage_bucket": "sbg-electric.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:624279043141:android:65312f5b4835514d60b72c",
+        "android_client_info": {
+          "package_name": "mn.sbg.sbgelectric"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "624279043141-q0ofvanr46hd7ke9nl0ikhilna8gspm0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "mn.sbg.sbgelectric",
+            "certificate_hash": "7babd455f3bcf43abe191f2306025e9f6b960078"
+          }
+        },
+        {
+          "client_id": "624279043141-rq1bocokstmj5pu51qfsl84iqu9t6c6p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArOsHMG8cZj7aZ9a95fUY1gro_kChQJHU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "624279043141-rq1bocokstmj5pu51qfsl84iqu9t6c6p.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "624279043141-c7quqttgh5ujm3u3b9g4qtnamtqg5vii.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "mn.sbg.sbgelectric"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
