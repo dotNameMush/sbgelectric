@@ -283,34 +283,39 @@ class _WebHomeViewState extends State<WebHomeView> {
                     children: [
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Text(
+                        children: [
+                          const Text(
                             'Холбоос',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 25,
                           ),
-                          Text(
+                          const Text(
                             'Нүүр',
                             style: TextStyle(color: Colors.white, fontSize: 16),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
-                          Text(
+                          const Text(
                             'Бидний тухай',
                             style: TextStyle(color: Colors.white, fontSize: 16),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
-                          Text(
-                            'Админ',
-                            style: TextStyle(color: Colors.white, fontSize: 16),
+                          InkWell(
+                            onTap: () =>
+                                Navigator.pushNamed(context, '/admin-login'),
+                            child: const Text(
+                              'Админ',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16),
+                            ),
                           ),
                         ],
                       ),
