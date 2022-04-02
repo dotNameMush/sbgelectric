@@ -97,7 +97,6 @@ GoogleSignIn _googleSignIn = GoogleSignIn(
   // clientId: '479882132969-9i9aqik3jfjd7qhci1nqf0bm2g71rm1u.apps.googleusercontent.com',
   scopes: <String>[
     'email',
-    'https://www.googleapis.com/auth/contacts.readonly',
   ],
 );
 
