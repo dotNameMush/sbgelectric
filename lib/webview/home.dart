@@ -312,7 +312,7 @@ class _WebHomeViewState extends State<WebHomeView> {
                             onTap: () =>
                                 Navigator.pushNamed(context, '/admin-login'),
                             child: const Text(
-                              'Админ',
+                              'Нэвтрэх',
                               style:
                                   TextStyle(color: Colors.white, fontSize: 16),
                             ),

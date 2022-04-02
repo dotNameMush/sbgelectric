@@ -136,7 +136,7 @@ class SignInDemoState extends State<SignInDemo> {
             onPressed: () {
               // ignore: unrelated_type_equality_checks
               if (user.id == '101120729428699030197') {
-                Navigator.pushNamed(context, '/products');
+                Navigator.pushNamed(context, '/admin-panel');
               } else {
                 Navigator.pushNamed(context, '/not-admin');
               }
