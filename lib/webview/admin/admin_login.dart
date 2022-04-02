@@ -1,94 +1,17 @@
 import 'dart:async';
 import 'dart:convert' show json;
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_sign_in/google_sign_in.dart';
-
-import '../../core/app_core/auth.dart';
-import '../../core/shared/error.dart';
-import '../../core/shared/loading.dart';
 
 class AdminLoginScreen extends StatelessWidget {
   const AdminLoginScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: AuthService().userStream,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const LoadingScreen();
-        } else if (snapshot.hasError) {
-          return const Center(
-            child: ErrorMessage(),
-          );
-        } else if (snapshot.hasData) {
-          return const LoggedInView();
-        } else {
-          return SignInDemo();
-        }
-      },
-    );
-  }
-}
-
-class LoggedInView extends StatelessWidget {
-  const LoggedInView({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('Админ Цэс'),
-        ),
-        body: Center(
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                    child: const Text('signout'),
-                    onPressed: () async {
-                      await AuthService().signOut();
-                    }),
-                ElevatedButton(
-                    onPressed: () {
-                      if (AuthService().checkadmin() == true) {
-                        Navigator.pushNamed(context, '/sent-info');
-                      } else {
-                        Navigator.pushNamed(context, '/not-admin');
-                      }
-                    },
-                    child: const Text('Мэдээлэлүүд харах'))
-              ]),
-        ));
-  }
-}
-
-class LoggedOutView extends StatelessWidget {
-  const LoggedOutView({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('Админ Цэс'),
-        ),
-        body: Center(
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                    onPressed: () => AuthService().googleLogin(),
-                    child: const Text('google login')),
-              ]),
-        ));
+    return const SignInDemo();
   }
 }
 
@@ -101,6 +24,8 @@ GoogleSignIn _googleSignIn = GoogleSignIn(
 );
 
 class SignInDemo extends StatefulWidget {
+  const SignInDemo({Key? key}) : super(key: key);
+
   @override
   State createState() => SignInDemoState();
 }
@@ -135,7 +60,7 @@ class SignInDemoState extends State<SignInDemo> {
     if (response.statusCode != 200) {
       setState(() {
         _contactText = 'People API gave a ${response.statusCode} '
-            'response. Check logs for details.';
+            'response. Check logs for details. ${user.id}';
       });
       print('People API ${response.statusCode} response: ${response.body}');
       return;
@@ -172,7 +97,18 @@ class SignInDemoState extends State<SignInDemo> {
 
   Future<void> _handleSignIn() async {
     try {
-      await _googleSignIn.signIn();
+      final googleUser = await _googleSignIn.signIn();
+      if (googleUser == null) return;
+
+      final googleAuth = await googleUser.authentication;
+      final authCredential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+      await FirebaseAuth.instance.signInWithCredential(authCredential);
+    } on FirebaseAuthException {
+      // handle error
+
     } catch (error) {
       print(error);
     }
@@ -196,8 +132,22 @@ class SignInDemoState extends State<SignInDemo> {
           const Text('Signed in successfully.'),
           Text(_contactText),
           ElevatedButton(
+            child: const Text('Админ Цэсэд нэвтрэх'),
+            onPressed: () {
+              // ignore: unrelated_type_equality_checks
+              if (user.id == '101120729428699030197') {
+                Navigator.pushNamed(context, '/products');
+              } else {
+                Navigator.pushNamed(context, '/not-admin');
+              }
+            },
+          ),
+          ElevatedButton(
             child: const Text('SIGN OUT'),
             onPressed: _handleSignOut,
+            style: ElevatedButton.styleFrom(
+              primary: Colors.red,
+            ),
           ),
           ElevatedButton(
             child: const Text('REFRESH'),
