@@ -1,5 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:sbgelectric/mobile_view/mobile_drawer.dart';
+import 'package:sbgelectric/services/firestore.dart';
+import 'package:sbgelectric/services/models.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../core/shared/shared.dart';
 
 class MobileHomeView extends StatefulWidget {
   const MobileHomeView({Key? key}) : super(key: key);
@@ -16,7 +22,7 @@ class _MobileHomeViewState extends State<MobileHomeView> {
         title: Image.asset('assets/logotext.png'),
         centerTitle: true,
       ),
-      drawer: const Drawer(),
+      drawer: const MobileDrawer(),
       body: Container(
         color: const Color(0xFFF8F8F8),
         child: ListView(
@@ -29,11 +35,141 @@ class _MobileHomeViewState extends State<MobileHomeView> {
                     image: DecorationImage(
                         image: AssetImage('assets/mobileHero.png'),
                         fit: BoxFit.fitWidth))),
-            const Text(
-              'Худалдаа',
-              style: TextStyle(fontSize: 32),
+            Column(
+              children: [
+                const Text(
+                  'Худалдаа',
+                  style: TextStyle(fontSize: 32),
+                ),
+                SizedBox(
+                  height: 300,
+                  child: FutureBuilder<List<Showcase>>(
+                    future: FirestoreService().getShowcase(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const LoadingScreen();
+                      } else if (snapshot.hasError) {
+                        return Center(
+                          child:
+                              ErrorMessage(message: snapshot.error.toString()),
+                        );
+                      } else if (snapshot.hasData) {
+                        var showcase = snapshot.data!;
+
+                        return CarouselSlider(
+                            items: showcase
+                                .map((item) => ClipRRect(
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(5.0)),
+                                    child: Image.network(item.img,
+                                        fit: BoxFit.cover, width: 1000.0)))
+                                .toList(),
+                            options: CarouselOptions(
+                              initialPage: 0,
+                              autoPlay: true,
+                              autoPlayInterval: const Duration(seconds: 3),
+                              enlargeCenterPage: true,
+                            ));
+                      } else {
+                        return const Text(
+                            'No Category found in Firestore. Check database');
+                      }
+                    },
+                  ),
+                ),
+                InkWell(
+                  onTap: () => Navigator.pushNamed(context, '/products'),
+                  child: Container(
+                    margin: const EdgeInsets.only(top: 10),
+                    width: 200,
+                    height: 70,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(100),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.25),
+                            spreadRadius: 1,
+                            blurRadius: 4,
+                            offset: const Offset(0, 1),
+                          )
+                        ]),
+                    child: const Center(
+                      child: Text(
+                        'Бүх барааг харах',
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFFB3B3B3)),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-            const Slider()
+            const SizedBox(
+              height: 20,
+            ),
+            Container(
+              margin: const EdgeInsets.only(top: 10, bottom: 35),
+              height: MediaQuery.of(context).size.height * 0.7,
+              width: MediaQuery.of(context).size.width,
+              decoration: const BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage('assets/contact.png'),
+                      fit: BoxFit.fitHeight)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  const Text(
+                    'Холбоо барих',
+                    style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+                    textAlign: TextAlign.center,
+                  ),
+                  const Text(
+                    'Дараах холбоосууд дээр дарж бидэнтэй холбогдоорой!',
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.white),
+                    textAlign: TextAlign.center,
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      ContactBoxButton(
+                        icon: Icons.location_on,
+                        text: 'БЗД, 5-р хороо, 48г байр',
+                        routeName: 'https://goo.gl/maps/LFe82nZf7WxK6EVu7',
+                      ),
+                      ContactBoxButton(
+                        icon: Icons.phone,
+                        text: '+976-9904-1895',
+                        routeName: 'tel:99041895',
+                      ),
+                      ContactBoxButton(
+                        icon: Icons.mail_outlined,
+                        text: 'sanjaa0403@gmail.com',
+                        routeName:
+                            'mailto:sanjaa0403@gmail.com?subject=subject&body=body',
+                      ),
+                    ],
+                  ),
+                  InkWell(
+                    onTap: () => launch('urlString'),
+                    child: const Icon(
+                      Icons.facebook_outlined,
+                      color: Colors.white,
+                      size: 83,
+                    ),
+                  ),
+                ],
+              ),
+            )
           ],
         ),
       ),
@@ -41,33 +177,45 @@ class _MobileHomeViewState extends State<MobileHomeView> {
   }
 }
 
-final List<String> imgList = [
-  'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
-  'https://images.unsplash.com/photo-1522205408450-add114ad53fe?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=368f45b0888aeb0b7b08e3a1084d3ede&auto=format&fit=crop&w=1950&q=80',
-  'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80',
-  'https://images.unsplash.com/photo-1523205771623-e0faa4d2813d?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=89719a0d55dd05e2deae4120227e6efc&auto=format&fit=crop&w=1953&q=80',
-  'https://images.unsplash.com/photo-1508704019882-f9cf40e475b4?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8c6e5e3aba713b17aa1fe71ab4f0ae5b&auto=format&fit=crop&w=1352&q=80',
-  'https://images.unsplash.com/photo-1519985176271-adb1088fa94c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=a0c8d632e977f94e5d312d9893258f59&auto=format&fit=crop&w=1355&q=80'
-];
+class ContactBoxButton extends StatelessWidget {
+  final IconData icon;
+  final String text;
+  final String routeName;
 
-class Slider extends StatelessWidget {
-  const Slider({
-    Key? key,
-  }) : super(key: key);
+  const ContactBoxButton(
+      {Key? key,
+      required this.icon,
+      required this.text,
+      required this.routeName})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return CarouselSlider(
-        items: imgList
-            .map((item) => ClipRRect(
-                borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-                child: Image.network(item, fit: BoxFit.cover, width: 1000.0)))
-            .toList(),
-        options: CarouselOptions(
-          initialPage: 0,
-          autoPlay: true,
-          autoPlayInterval: const Duration(seconds: 3),
-          enlargeCenterPage: true,
+    return InkWell(
+        onTap: () => launch(routeName),
+        child: Container(
+          margin: const EdgeInsets.all(10),
+          height: 75,
+          width: MediaQuery.of(context).size.width * 0.9,
+          decoration: BoxDecoration(
+              color: const Color(0xFF004882),
+              borderRadius: BorderRadius.circular(30)),
+          child: Center(
+            child: ListTile(
+              leading: Icon(
+                icon,
+                color: Colors.white,
+                size: 54,
+              ),
+              title: Text(
+                text,
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14),
+              ),
+            ),
+          ),
         ));
   }
 }
