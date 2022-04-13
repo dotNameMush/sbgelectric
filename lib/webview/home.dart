@@ -117,7 +117,13 @@ class _WebHomeViewState extends State<WebHomeView> {
                             color: Colors.black.withOpacity(0.25),
                             spreadRadius: 1,
                             blurRadius: 4,
-                            offset: const Offset(0, 1),
+                            offset: const Offset(1, 4),
+                          ),
+                          BoxShadow(
+                            color: Colors.white.withOpacity(0.80),
+                            spreadRadius: 1,
+                            blurRadius: 4,
+                            offset: const Offset(-1, -2),
                           )
                         ]),
                     child: const Center(
@@ -187,7 +193,8 @@ class _WebHomeViewState extends State<WebHomeView> {
                     ],
                   ),
                   InkWell(
-                    onTap: () => launch('urlString'),
+                    onTap: () => launch(
+                        'https://www.facebook.com/SBG-Spare-Parts-Sale-Center-Air-Conditioning-Electrical-2109176542744739'),
                     child: const Icon(
                       Icons.facebook_outlined,
                       color: Colors.white,
@@ -301,9 +308,14 @@ class _WebHomeViewState extends State<WebHomeView> {
                           const SizedBox(
                             height: 20,
                           ),
-                          const Text(
-                            'Бидний тухай',
-                            style: TextStyle(color: Colors.white, fontSize: 16),
+                          InkWell(
+                            onTap: () =>
+                                Navigator.pushNamed(context, '/about-web'),
+                            child: const Text(
+                              'Бидний тухай',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16),
+                            ),
                           ),
                           const SizedBox(
                             height: 20,
@@ -324,27 +336,37 @@ class _WebHomeViewState extends State<WebHomeView> {
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Text(
+                        children: [
+                          const Text(
                             ' ',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 25,
                           ),
-                          Text(
-                            'Үйлчилгээ',
-                            style: TextStyle(color: Colors.white, fontSize: 16),
+                          InkWell(
+                            onTap: () =>
+                                Navigator.pushNamed(context, '/about-web'),
+                            child: const Text(
+                              'Үйлчилгээ',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16),
+                            ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
-                          Text(
-                            'Facebook хуудас',
-                            style: TextStyle(color: Colors.white, fontSize: 16),
+                          InkWell(
+                            onTap: () => launch(
+                                'https://www.facebook.com/SBG-Spare-Parts-Sale-Center-Air-Conditioning-Electrical-2109176542744739'),
+                            child: const Text(
+                              'Facebook хуудас',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16),
+                            ),
                           ),
                         ],
                       ),
@@ -353,32 +375,46 @@ class _WebHomeViewState extends State<WebHomeView> {
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Text(
-                            'Гадаад худалдаа',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold),
+                        children: [
+                          InkWell(
+                            onTap: () =>
+                                Navigator.pushNamed(context, '/products'),
+                            child: const Text(
+                              'Гадаад худалдаа',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold),
+                            ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 25,
                           ),
-                          Text(
-                            'Бүх бараа харах',
-                            style: TextStyle(color: Colors.white, fontSize: 16),
+                          InkWell(
+                            onTap: () =>
+                                Navigator.pushNamed(context, '/products'),
+                            child: const Text(
+                              'Бүх бараа харах',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16),
+                            ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
-                          Text(
-                            'Ангилал',
-                            style: TextStyle(color: Colors.white, fontSize: 16),
+                          InkWell(
+                            onTap: () =>
+                                Navigator.pushNamed(context, '/products'),
+                            child: const Text(
+                              'Ангилал',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16),
+                            ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
-                          Text(
+                          const Text(
                             'Хэрхэн худалдан авах вэ?',
                             style: TextStyle(color: Colors.white, fontSize: 16),
                           ),
@@ -386,8 +422,10 @@ class _WebHomeViewState extends State<WebHomeView> {
                       ),
                     ],
                   ),
-                  const Expanded(
-                      child: Align(
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  const Align(
                     alignment: Alignment.bottomCenter,
                     child: Text(
                       'Copyright 2022, Newline Solutions',
@@ -396,7 +434,7 @@ class _WebHomeViewState extends State<WebHomeView> {
                           fontSize: 16,
                           fontWeight: FontWeight.w400),
                     ),
-                  )),
+                  ),
                   const SizedBox(
                     height: 20,
                   )
