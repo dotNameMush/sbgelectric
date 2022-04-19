@@ -301,9 +301,13 @@ class _WebHomeViewState extends State<WebHomeView> {
                           const SizedBox(
                             height: 25,
                           ),
-                          const Text(
-                            'Нүүр',
-                            style: TextStyle(color: Colors.white, fontSize: 16),
+                          InkWell(
+                            onTap: () => Navigator.pushNamed(context, '/'),
+                            child: const Text(
+                              'Нүүр',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16),
+                            ),
                           ),
                           const SizedBox(
                             height: 20,

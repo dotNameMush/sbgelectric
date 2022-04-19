@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sbgelectric/services/firestore.dart';
 
 import '../../core/shared/error.dart';
@@ -35,10 +36,9 @@ class _ProductScreenState extends State<ProductScreen> {
                               fontSize: 36, fontWeight: FontWeight.bold),
                         ),
                         Container(
-                          decoration: const BoxDecoration(color: Colors.white),
                           width: MediaQuery.of(context).size.width / 10 * 5,
                           child: const CategoryWidget(),
-                        )
+                        ),
                       ],
                     ),
                   ],
@@ -67,7 +67,7 @@ class CategoryWidget extends StatelessWidget {
         } else if (snapshot.hasData) {
           var categories = snapshot.data!;
 
-          return Column(
+          return Wrap(
             children: categories
                 .map((category) => CategoryItem(category: category))
                 .toList(),
@@ -86,25 +86,54 @@ class CategoryItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (BuildContext context) => ItemScreen(category: category),
-        ));
-      },
-      child: Container(
-        margin: const EdgeInsets.all(20),
-        width: 330,
-        height: 60,
-        decoration: BoxDecoration(
-            border: Border.all(color: const Color(0xFF005497)),
-            borderRadius: BorderRadius.circular(10)),
-        child: Center(
-            child: Text(
-          category.name,
-          style: const TextStyle(fontSize: 32, color: Color(0xFF005497)),
-        )),
-      ),
+    return Container(
+      margin: const EdgeInsets.all(10),
+      child: InkWell(
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (BuildContext context) => ItemScreen(category: category),
+            ));
+          },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                height: 100,
+                width: 100,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: const [
+                      BoxShadow(
+                          color: Colors.grey,
+                          spreadRadius: 2,
+                          blurRadius: 4,
+                          offset: Offset(4, 4)),
+                      BoxShadow(
+                          color: Colors.white,
+                          spreadRadius: 4,
+                          blurRadius: 4,
+                          offset: Offset(-4, -4)),
+                    ]),
+                child: const Center(
+                  child: Icon(
+                    FontAwesomeIcons.shoppingBag,
+                    color: Colors.blue,
+                    size: 40,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Text(
+                category.name,
+                style:
+                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              )
+            ],
+          )),
     );
   }
 }
