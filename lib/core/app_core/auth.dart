@@ -6,25 +6,6 @@ class AuthService {
   final user = FirebaseAuth.instance.currentUser;
   final FirebaseAuth auth = FirebaseAuth.instance;
 
-  checkadmin() {
-    User? user = auth.currentUser;
-    final uid = user?.uid;
-    if (uid == 'hN8cQObLzfXE5r6DydEl62lsiCy1' ||
-        uid == 'LDhsdU44UcUKZNJGd1w5AZVPEr63') {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  Future<void> anonLogin() async {
-    try {
-      await FirebaseAuth.instance.signInAnonymously();
-    } on FirebaseAuthException {
-      // handle error
-    }
-  }
-
   Future<void> googleLogin() async {
     try {
       final googleUser = await GoogleSignIn().signIn();

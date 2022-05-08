@@ -5,8 +5,10 @@ part 'models.g.dart';
 class Category {
   late final String id;
   final String name;
-  final List<Item> items;
-  Category({this.id = '', this.name = '', this.items = const []});
+  Category({
+    this.id = '',
+    this.name = '',
+  });
   factory Category.fromJson(Map<String, dynamic> json) =>
       _$CategoryFromJson(json);
   Map<String, dynamic> toJson() => _$CategoryToJson(this);
@@ -15,12 +17,14 @@ class Category {
 @JsonSerializable()
 class Item {
   String id;
+  String category;
   String name;
   String description;
   String price;
   String img;
   Item({
     this.id = '',
+    this.category = '',
     this.name = '',
     this.description = '',
     this.img = '',

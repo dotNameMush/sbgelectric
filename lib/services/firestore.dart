@@ -16,6 +16,14 @@ class FirestoreService {
     return categories.toList();
   }
 
+  Future<List<Item>> getItems() async {
+    var ref = _db.collection('item').orderBy('category');
+    var snapshot = await ref.get();
+    var data = snapshot.docs.map((s) => s.data());
+    var categories = data.map((d) => Item.fromJson(d));
+    return categories.toList();
+  }
+
   Future<Item> getItem(String itemId) async {
     var ref = _db.collection('item').doc(itemId);
     var snapshot = await ref.get();

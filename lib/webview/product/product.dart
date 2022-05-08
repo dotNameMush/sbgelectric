@@ -31,7 +31,7 @@ class _ProductScreenState extends State<ProductScreen> {
                     Column(
                       children: [
                         const Text(
-                          'Барааны ангилал',
+                          'Бараа',
                           style: TextStyle(
                               fontSize: 36, fontWeight: FontWeight.bold),
                         ),
@@ -55,8 +55,8 @@ class CategoryWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Category>>(
-      future: FirestoreService().getCategory(),
+    return FutureBuilder<List<Item>>(
+      future: FirestoreService().getItems(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const LoadingScreen();
@@ -69,7 +69,7 @@ class CategoryWidget extends StatelessWidget {
 
           return Wrap(
             children: categories
-                .map((category) => CategoryItem(category: category))
+                .map((category) => SalesCardWidget(item: category))
                 .toList(),
           );
         } else {
@@ -148,61 +148,7 @@ class ItemScreen extends StatelessWidget {
       body: Container(
         padding: const EdgeInsets.all(20),
         child: Column(
-          children: [
-            Text(category.name),
-            Wrap(
-              children: category.items.map((item) {
-                return Container(
-                  margin: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: Colors.grey,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.25),
-                        spreadRadius: 0,
-                        blurRadius: 4,
-                        offset:
-                            const Offset(0, 4), // changes position of shadow
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(5),
-                        width: 230,
-                        height: 320,
-                        decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: NetworkImage(item.img),
-                                fit: BoxFit.cover)),
-                      ),
-                      Container(
-                        decoration: const BoxDecoration(color: Colors.white),
-                        padding: const EdgeInsets.all(5),
-                        height: 80,
-                        width: 230,
-                        child: Column(
-                          children: [
-                            Text(
-                              item.name,
-                              style: const TextStyle(
-                                  color: Colors.black, fontSize: 18),
-                            ),
-                            Text(
-                              item.price,
-                              style: const TextStyle(
-                                  color: Colors.blue, fontSize: 18),
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                );
-              }).toList(),
-            )
-          ],
+          children: [Text(category.name), Wrap()],
         ),
       ),
     );

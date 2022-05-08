@@ -1,16 +1,17 @@
 import 'dart:async';
-import 'dart:io';
-import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:sbgelectric/core/app_core/auth.dart';
+import 'package:path/path.dart';
+import 'package:sbgelectric/webview/admin/product_edit.dart';
 
 import '../../core/shared/shared.dart';
 import '../../services/firestore.dart';
 import '../../services/models.dart';
+import 'category_edit.dart';
 
 class AdminScreen extends StatefulWidget {
   const AdminScreen({Key? key}) : super(key: key);
@@ -24,7 +25,8 @@ class _AdminScreenState extends State<AdminScreen> {
 
   static final List<Widget> _widgetOptions = <Widget>[
     const ShowcaseEdit(),
-    const ProductsEdit(),
+    const CategoryEdit(),
+    const ProductEdit()
   ];
 
   void _onItemTapped(int index) {
@@ -57,7 +59,17 @@ class _AdminScreenState extends State<AdminScreen> {
               ListTile(
                 onTap: () => _onItemTapped(1),
                 leading: const Icon(Icons.shopping_bag_outlined),
-                title: const Text('Бараа/Ангилал'),
+                title: const Text('Ангилал'),
+              ),
+              ListTile(
+                onTap: () => _onItemTapped(2),
+                leading: const Icon(Icons.shopping_bag_outlined),
+                title: const Text('Бараа'),
+              ),
+              ListTile(
+                onTap: () => AuthService().signOut(),
+                leading: const Icon(Icons.logout, color: Colors.red),
+                title: const Text('Sign Out'),
               ),
             ],
           ),
@@ -67,9 +79,7 @@ class _AdminScreenState extends State<AdminScreen> {
         decoration: const BoxDecoration(color: Color(0xFFF8F8F8)),
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        child: Center(
-          child: _widgetOptions.elementAt(_selectedIndex),
-        ),
+        child: _widgetOptions.elementAt(_selectedIndex),
       ),
     );
   }
@@ -83,51 +93,38 @@ class ShowcaseEdit extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(top: 20),
       decoration: const BoxDecoration(color: Colors.white),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Column(
-          children: [
-            const Padding(
-              padding: EdgeInsets.all(20),
-              child: Text('Үзүүлэнгийн бараанууд'),
-            ),
-            FutureBuilder<List<Showcase>>(
-              future: FirestoreService().getShowcase(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const LoadingScreen();
-                } else if (snapshot.hasError) {
-                  return Center(
-                    child: ErrorMessage(message: snapshot.error.toString()),
-                  );
-                } else if (snapshot.hasData) {
-                  var showcase = snapshot.data!;
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Padding(
+            padding: EdgeInsets.all(20),
+            child: Text('Үзүүлэнгийн бараанууд'),
+          ),
+          FutureBuilder<List<Showcase>>(
+            future: FirestoreService().getShowcase(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const LoadingScreen();
+              } else if (snapshot.hasError) {
+                return Center(
+                  child: ErrorMessage(message: snapshot.error.toString()),
+                );
+              } else if (snapshot.hasData) {
+                var showcase = snapshot.data!;
 
-                  return Wrap(
-                    children: showcase
-                        .map((showcase) => SalesCardWidget(showcase: showcase))
-                        .toList(),
-                  );
-                } else {
-                  return const Text(
-                      'No Category found in Firestore. Check database');
-                }
-              },
-            ),
-          ],
-        ),
+                return Wrap(
+                  children: showcase
+                      .map((showcase) => SalesCardWidget(showcase: showcase))
+                      .toList(),
+                );
+              } else {
+                return const Text(
+                    'No Category found in Firestore. Check database');
+              }
+            },
+          ),
+        ],
       ),
-    );
-  }
-}
-
-class ProductsEdit extends StatelessWidget {
-  const ProductsEdit({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Text('products'),
     );
   }
 }
@@ -180,7 +177,6 @@ class SalesCardWidget extends StatelessWidget {
               ],
             ),
           ),
-          Text(showcase.id),
           ElevatedButton(
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
@@ -208,13 +204,12 @@ final _formKey = GlobalKey<FormState>();
 
 class _ShowcaseItemScreenState extends State<ShowcaseItemScreen> {
   UploadTask? task;
-  Uint8List? imageFile;
-  String chosenFile = '';
-  String _img = '';
+  XFile? file;
   String _name = '';
   String _price = '';
   @override
   Widget build(BuildContext context) {
+    String pathname = file == null ? '' : basename(file!.path);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.showcase.name),
@@ -229,9 +224,9 @@ class _ShowcaseItemScreenState extends State<ShowcaseItemScreen> {
                     key: _formKey,
                     child: Column(
                       children: [
-                        const Text(
-                          'Зураг шинэчлэхэд зөвхөн утсаар орох шаардлагатай',
-                          style: TextStyle(
+                        Text(
+                          pathname,
+                          style: const TextStyle(
                               fontSize: 16, fontWeight: FontWeight.w500),
                         ),
                         InkWell(
@@ -296,6 +291,7 @@ class _ShowcaseItemScreenState extends State<ShowcaseItemScreen> {
                             color: const Color(0xFF223263),
                             text: 'Мэдээлэл илгээх',
                             onClicked: () async {
+                              var uploadedPhotoUrl = '';
                               //validate and check the form with functio
                               var ref = FirebaseFirestore.instance
                                   .collection('showcase')
@@ -309,12 +305,28 @@ class _ShowcaseItemScreenState extends State<ShowcaseItemScreen> {
                               final isValid = _formKey.currentState!.validate();
                               if (isValid) {
                                 _formKey.currentState!.save();
-
+                                var storageref = FirebaseStorage.instance
+                                    .ref()
+                                    .child('images/${basename(file!.path)}');
+                                await storageref
+                                    .putData(
+                                        await file!.readAsBytes(),
+                                        SettableMetadata(
+                                            contentType: 'image/jpeg'))
+                                    .whenComplete(() async {
+                                  await storageref
+                                      .getDownloadURL()
+                                      .then((value) {
+                                    setState(() {
+                                      uploadedPhotoUrl = value;
+                                    });
+                                  });
+                                });
                                 //Prep form data for firebase
                                 var data = {
                                   'id': widget.showcase.id,
                                   'name': _name,
-                                  'img': widget.showcase.img,
+                                  'img': uploadedPhotoUrl,
                                   'price': _price,
                                 };
                                 ref
@@ -349,14 +361,10 @@ class _ShowcaseItemScreenState extends State<ShowcaseItemScreen> {
   }
 
   Future selectFile() async {
-    final result = await FilePicker.platform.pickFiles(allowMultiple: false);
-    if (result == null) return;
-    final path = result.files.single.bytes!;
-    final fileName = result.files.first.name;
-
+    XFile? pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
     setState(() {
-      imageFile = path;
-      chosenFile = fileName;
+      file = pickedFile;
     });
   }
 }
