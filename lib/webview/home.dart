@@ -176,8 +176,8 @@ class _WebHomeViewState extends State<WebHomeView> {
                     children: const [
                       ContactBoxButton(
                         icon: Icons.location_on,
-                        text: 'БЗД, 5-р хороо, 48г байр',
-                        routeName: 'https://goo.gl/maps/LFe82nZf7WxK6EVu7',
+                        text: 'Шинэ Айл худалдааны төв',
+                        routeName: 'https://goo.gl/maps/KDKn5a4Yuh8hJc747',
                       ),
                       ContactBoxButton(
                         icon: Icons.phone,
@@ -193,8 +193,7 @@ class _WebHomeViewState extends State<WebHomeView> {
                     ],
                   ),
                   InkWell(
-                    onTap: () => launch(
-                        'https://www.facebook.com/SBG-Spare-Parts-Sale-Center-Air-Conditioning-Electrical-2109176542744739'),
+                    onTap: () => launch('https://www.facebook.com/sanjaa0403'),
                     child: const Icon(
                       Icons.facebook_outlined,
                       color: Colors.white,
@@ -364,8 +363,8 @@ class _WebHomeViewState extends State<WebHomeView> {
                             height: 20,
                           ),
                           InkWell(
-                            onTap: () => launch(
-                                'https://www.facebook.com/SBG-Spare-Parts-Sale-Center-Air-Conditioning-Electrical-2109176542744739'),
+                            onTap: () =>
+                                launch('https://www.facebook.com/sanjaa0403'),
                             child: const Text(
                               'Facebook хуудас',
                               style:

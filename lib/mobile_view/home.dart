@@ -78,7 +78,7 @@ class _MobileHomeViewState extends State<MobileHomeView> {
                   ),
                 ),
                 InkWell(
-                  onTap: () => Navigator.pushNamed(context, '/products'),
+                  onTap: () => Navigator.pushNamed(context, '/mobile-products'),
                   child: Container(
                     margin: const EdgeInsets.only(top: 10),
                     width: 200,
@@ -143,8 +143,8 @@ class _MobileHomeViewState extends State<MobileHomeView> {
                     children: const [
                       ContactBoxButton(
                         icon: Icons.location_on,
-                        text: 'БЗД, 5-р хороо, 48г байр',
-                        routeName: 'https://goo.gl/maps/LFe82nZf7WxK6EVu7',
+                        text: 'Шинэ Айл худалдааны төв',
+                        routeName: 'https://goo.gl/maps/KDKn5a4Yuh8hJc747',
                       ),
                       ContactBoxButton(
                         icon: Icons.phone,
@@ -160,7 +160,7 @@ class _MobileHomeViewState extends State<MobileHomeView> {
                     ],
                   ),
                   InkWell(
-                    onTap: () => launch('urlString'),
+                    onTap: () => launch('https://www.facebook.com/sanjaa0403'),
                     child: const Icon(
                       Icons.facebook_outlined,
                       color: Colors.white,

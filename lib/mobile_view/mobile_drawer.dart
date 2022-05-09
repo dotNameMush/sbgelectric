@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MobileDrawer extends StatelessWidget {
   const MobileDrawer({Key? key}) : super(key: key);
@@ -69,26 +70,29 @@ class MobileDrawer extends StatelessWidget {
               ],
             )),
             Column(
-              children: const [
-                ListTile(
+              children: [
+                const ListTile(
                   leading: Icon(Icons.home),
                   title: Text('Нүүр'),
                 ),
                 ListTile(
-                  leading: Icon(Icons.apartment),
-                  title: Text('Бидний тухай'),
+                  onTap: () => Navigator.pushNamed(context, '/about-web'),
+                  leading: const Icon(Icons.apartment),
+                  title: const Text('Бидний тухай'),
                 ),
                 ListTile(
-                  leading: Icon(Icons.shopping_bag),
-                  title: Text('Бүх бараа харах'),
+                  onTap: () => Navigator.pushNamed(context, '/mobile-products'),
+                  leading: const Icon(Icons.shopping_bag),
+                  title: const Text('Бүх бараа харах'),
                 ),
-                ListTile(
+                const ListTile(
                   leading: Icon(Icons.question_mark),
                   title: Text('Хэрхэн худалдан авах вэ?'),
                 ),
                 ListTile(
-                  leading: Icon(Icons.facebook),
-                  title: Text('Facebook хуудас'),
+                  onTap: () => launch('https://www.facebook.com/sanjaa0403'),
+                  leading: const Icon(Icons.facebook),
+                  title: const Text('Facebook хуудас'),
                 ),
               ],
             ),

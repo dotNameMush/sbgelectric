@@ -1,53 +1,42 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:sbgelectric/services/firestore.dart';
 
-import '../../core/shared/error.dart';
-import '../../core/shared/loading.dart';
-import '../../services/models.dart';
+import '../core/shared/shared.dart';
+import '../services/firestore.dart';
+import '../services/models.dart';
 
-class ProductScreen extends StatefulWidget {
-  const ProductScreen({Key? key}) : super(key: key);
+class MobileProducts extends StatelessWidget {
+  const MobileProducts({Key? key}) : super(key: key);
 
-  @override
-  State<ProductScreen> createState() => _ProductScreenState();
-}
-
-class _ProductScreenState extends State<ProductScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Бүх бараа'),
+        title: const Text('Бүх Бараа'),
+        centerTitle: true,
       ),
       body: Container(
-          decoration: const BoxDecoration(color: Color(0xFFF8F8F8)),
-          child: ListView(
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Column(
-                    children: [
-                      const Text(
-                        'Бараа',
-                        style: TextStyle(
-                            fontSize: 36, fontWeight: FontWeight.bold),
-                      ),
-                      Container(
-                        height: MediaQuery.of(context).size.height,
-                        padding: const EdgeInsets.all(20),
-                        width: MediaQuery.of(context).size.width - 60,
-                        child: const CategoryWidget(),
-                      ),
-                    ],
-                  ),
-                ],
-              )
-            ],
-          )),
+        decoration: const BoxDecoration(
+          color: Color(0xFFF8F8F8),
+        ),
+        child: ListView(
+          scrollDirection: Axis.vertical,
+          children: [
+            const Padding(
+              padding: EdgeInsets.all(20),
+              child: Text(
+                'Бараа',
+                style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
+              ),
+            ),
+            Container(
+              height: MediaQuery.of(context).size.height,
+              padding: const EdgeInsets.all(20),
+              width: MediaQuery.of(context).size.width - 60,
+              child: const CategoryWidget(),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -88,6 +77,7 @@ class SalesCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
     return Container(
       margin: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -105,7 +95,7 @@ class SalesCardWidget extends StatelessWidget {
         children: [
           Container(
             padding: const EdgeInsets.all(5),
-            width: 230,
+            width: width - 40,
             height: 320,
             decoration: BoxDecoration(
                 image: DecorationImage(
@@ -115,7 +105,7 @@ class SalesCardWidget extends StatelessWidget {
             decoration: const BoxDecoration(color: Colors.white),
             padding: const EdgeInsets.all(5),
             height: 80,
-            width: 230,
+            width: width - 40,
             child: Column(
               children: [
                 Text(

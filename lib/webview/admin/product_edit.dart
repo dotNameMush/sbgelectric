@@ -39,11 +39,7 @@ class ProductEdit extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Container(
-                    padding: const EdgeInsets.all(20),
-                    width: MediaQuery.of(context).size.width,
-                    child: const ProductsWidget(),
-                  ),
+                  const ProductsWidget(),
                 ],
               )
             ],
@@ -58,120 +54,125 @@ class ProductsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width - 40;
-    return Column(
-      children: [
-        Row(
-          children: [
-            Container(
-              width: width / 5 * 2.5,
-              padding: const EdgeInsets.only(top: 10, bottom: 10, left: 5),
-              decoration: BoxDecoration(border: Border.all()),
-              child: const Text(
-                'Нэр',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-            ),
-            Container(
-              width: width / 5 * 1,
-              padding: const EdgeInsets.only(top: 10, bottom: 10, left: 5),
-              decoration: BoxDecoration(border: Border.all()),
-              child: const Text(
-                'Ангилал',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-            ),
-            Container(
-              width: width / 5 * 1,
-              padding: const EdgeInsets.only(top: 10, bottom: 10, left: 5),
-              decoration: BoxDecoration(border: Border.all()),
-              child: const Text(
-                'Үнэ',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-            ),
-            Container(
-                width: width / 5 * 0.5,
-                padding: const EdgeInsets.only(top: 8, bottom: 8, left: 5),
+    return Container(
+      padding: const EdgeInsets.all(20),
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Container(
+                width: width / 5 * 2.5,
+                padding: const EdgeInsets.only(top: 10, bottom: 10, left: 5),
                 decoration: BoxDecoration(border: Border.all()),
-                child: ElevatedButton.icon(
-                    onPressed: () {},
-                    icon: const Icon(Icons.edit),
-                    label: const Text('Засах'))),
-          ],
-        ),
-        FutureBuilder<List<Item>>(
-          future: FirestoreService().getItems(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const LoadingScreen();
-            } else if (snapshot.hasError) {
-              return Center(
-                child: ErrorMessage(message: snapshot.error.toString()),
-              );
-            } else if (snapshot.hasData) {
-              var items = snapshot.data!;
+                child: const Text(
+                  'Нэр',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ),
+              Container(
+                width: width / 5 * 1,
+                padding: const EdgeInsets.only(top: 10, bottom: 10, left: 5),
+                decoration: BoxDecoration(border: Border.all()),
+                child: const Text(
+                  'Ангилал',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ),
+              Container(
+                width: width / 5 * 1,
+                padding: const EdgeInsets.only(top: 10, bottom: 10, left: 5),
+                decoration: BoxDecoration(border: Border.all()),
+                child: const Text(
+                  'Үнэ',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ),
+              Container(
+                  width: width / 5 * 0.5,
+                  padding: const EdgeInsets.only(top: 8, bottom: 8, left: 5),
+                  decoration: BoxDecoration(border: Border.all()),
+                  child: ElevatedButton.icon(
+                      onPressed: () {},
+                      icon: const Icon(Icons.edit),
+                      label: const Text('Засах'))),
+            ],
+          ),
+          FutureBuilder<List<Item>>(
+            future: FirestoreService().getItems(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const LoadingScreen();
+              } else if (snapshot.hasError) {
+                return Center(
+                  child: ErrorMessage(message: snapshot.error.toString()),
+                );
+              } else if (snapshot.hasData) {
+                var items = snapshot.data!;
 
-              return Column(
-                children: items.map((item) {
-                  var width = MediaQuery.of(context).size.width - 40;
-                  return Row(
-                    children: [
-                      Container(
-                        width: width / 5 * 2.5,
-                        padding:
-                            const EdgeInsets.only(top: 10, bottom: 10, left: 5),
-                        decoration: BoxDecoration(border: Border.all()),
-                        child: Text(
-                          item.name,
-                          style: const TextStyle(
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: width / 5 * 1,
-                        padding:
-                            const EdgeInsets.only(top: 10, bottom: 10, left: 5),
-                        decoration: BoxDecoration(border: Border.all()),
-                        child: Text(
-                          item.category,
-                          style: const TextStyle(
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: width / 5 * 1,
-                        padding:
-                            const EdgeInsets.only(top: 10, bottom: 10, left: 5),
-                        decoration: BoxDecoration(border: Border.all()),
-                        child: Text(
-                          item.price,
-                          style: const TextStyle(
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                      Container(
-                          width: width / 5 * 0.5,
-                          padding:
-                              const EdgeInsets.only(top: 8, bottom: 8, left: 5),
+                return Column(
+                  children: items.map((item) {
+                    var width = MediaQuery.of(context).size.width - 40;
+                    return Row(
+                      children: [
+                        Container(
+                          width: width / 5 * 2.5,
+                          padding: const EdgeInsets.only(
+                              top: 10, bottom: 10, left: 5),
                           decoration: BoxDecoration(border: Border.all()),
-                          child: ElevatedButton.icon(
-                              onPressed: () {},
-                              icon: Icon(Icons.edit),
-                              label: Text('Засах'))),
-                    ],
-                  );
-                }).toList(),
-              );
-            } else {
-              return const Text(
-                  'No Category found in Firestore. Check database');
-            }
-          },
-        )
-      ],
+                          child: Text(
+                            item.name,
+                            style: const TextStyle(
+                              fontSize: 18,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: width / 5 * 1,
+                          padding: const EdgeInsets.only(
+                              top: 10, bottom: 10, left: 5),
+                          decoration: BoxDecoration(border: Border.all()),
+                          child: Text(
+                            item.category,
+                            style: const TextStyle(
+                              fontSize: 18,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: width / 5 * 1,
+                          padding: const EdgeInsets.only(
+                              top: 10, bottom: 10, left: 5),
+                          decoration: BoxDecoration(border: Border.all()),
+                          child: Text(
+                            item.price,
+                            style: const TextStyle(
+                              fontSize: 18,
+                            ),
+                          ),
+                        ),
+                        Container(
+                            width: width / 5 * 0.5,
+                            padding: const EdgeInsets.only(
+                                top: 8, bottom: 8, left: 5),
+                            decoration: BoxDecoration(border: Border.all()),
+                            child: ElevatedButton.icon(
+                                onPressed: () {},
+                                icon: Icon(Icons.edit),
+                                label: Text('Засах'))),
+                      ],
+                    );
+                  }).toList(),
+                );
+              } else {
+                return const Text(
+                    'No Category found in Firestore. Check database');
+              }
+            },
+          )
+        ],
+      ),
     );
   }
 }

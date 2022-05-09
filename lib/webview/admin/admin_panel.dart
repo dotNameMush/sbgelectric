@@ -100,28 +100,32 @@ class ShowcaseEdit extends StatelessWidget {
             padding: EdgeInsets.all(20),
             child: Text('Үзүүлэнгийн бараанууд'),
           ),
-          FutureBuilder<List<Showcase>>(
-            future: FirestoreService().getShowcase(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const LoadingScreen();
-              } else if (snapshot.hasError) {
-                return Center(
-                  child: ErrorMessage(message: snapshot.error.toString()),
-                );
-              } else if (snapshot.hasData) {
-                var showcase = snapshot.data!;
+          Container(
+            padding: const EdgeInsets.all(5),
+            height: MediaQuery.of(context).size.height - 150,
+            child: FutureBuilder<List<Showcase>>(
+              future: FirestoreService().getShowcase(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const LoadingScreen();
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: ErrorMessage(message: snapshot.error.toString()),
+                  );
+                } else if (snapshot.hasData) {
+                  var showcase = snapshot.data!;
 
-                return Wrap(
-                  children: showcase
-                      .map((showcase) => SalesCardWidget(showcase: showcase))
-                      .toList(),
-                );
-              } else {
-                return const Text(
-                    'No Category found in Firestore. Check database');
-              }
-            },
+                  return Wrap(
+                    children: showcase
+                        .map((showcase) => SalesCardWidget(showcase: showcase))
+                        .toList(),
+                  );
+                } else {
+                  return const Text(
+                      'No Category found in Firestore. Check database');
+                }
+              },
+            ),
           ),
         ],
       ),
