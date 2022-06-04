@@ -4,7 +4,7 @@ import 'package:sbgelectric/webview/about.dart';
 import 'package:sbgelectric/webview/admin/admin_login.dart';
 import 'package:sbgelectric/webview/admin/admin_panel.dart';
 import 'package:sbgelectric/webview/admin/not_admin.dart';
-import 'package:sbgelectric/webview/product/product.dart';
+import 'package:sbgelectric/webview/product/products.dart';
 
 var appRoutes = {
   '/': (context) => const PlatformCheck(),

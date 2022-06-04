@@ -79,29 +79,34 @@ class _WebHomeViewState extends State<WebHomeView> {
               children: [
                 const Text('Худалдаа',
                     style: TextStyle(color: Colors.black, fontSize: 48)),
-                FutureBuilder<List<Showcase>>(
-                  future: FirestoreService().getShowcase(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const LoadingScreen();
-                    } else if (snapshot.hasError) {
-                      return Center(
-                        child: ErrorMessage(message: snapshot.error.toString()),
-                      );
-                    } else if (snapshot.hasData) {
-                      var showcase = snapshot.data!;
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  height: MediaQuery.of(context).size.height / 2,
+                  child: FutureBuilder<List<Showcase>>(
+                    future: FirestoreService().getShowcase(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const LoadingScreen();
+                      } else if (snapshot.hasError) {
+                        return Center(
+                          child:
+                              ErrorMessage(message: snapshot.error.toString()),
+                        );
+                      } else if (snapshot.hasData) {
+                        var showcase = snapshot.data!;
 
-                      return Wrap(
-                        children: showcase
-                            .map((showcase) =>
-                                SalesCardWidget(showcase: showcase))
-                            .toList(),
-                      );
-                    } else {
-                      return const Text(
-                          'No Category found in Firestore. Check database');
-                    }
-                  },
+                        return Wrap(
+                          children: showcase
+                              .map((showcase) =>
+                                  SalesCardWidget(showcase: showcase))
+                              .toList(),
+                        );
+                      } else {
+                        return const Text(
+                            'No Category found in Firestore. Check database');
+                      }
+                    },
+                  ),
                 ),
                 InkWell(
                   onTap: () => Navigator.pushNamed(context, '/products'),
@@ -132,7 +137,7 @@ class _WebHomeViewState extends State<WebHomeView> {
                         style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
-                            color: Color(0xFFB3B3B3)),
+                            color: Color.fromARGB(255, 133, 133, 133)),
                       ),
                     ),
                   ),

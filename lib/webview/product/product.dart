@@ -1,135 +1,151 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:sbgelectric/services/firestore.dart';
+import 'package:sbgelectric/services/models.dart';
 
-import '../../core/shared/error.dart';
-import '../../core/shared/loading.dart';
-import '../../services/models.dart';
+class ProductDetailScreen extends StatelessWidget {
+  final Item item;
+  const ProductDetailScreen({Key? key, required this.item}) : super(key: key);
 
-class ProductScreen extends StatefulWidget {
-  const ProductScreen({Key? key}) : super(key: key);
-
-  @override
-  State<ProductScreen> createState() => _ProductScreenState();
-}
-
-class _ProductScreenState extends State<ProductScreen> {
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Бүх бараа'),
+        title: Text(item.name),
+        centerTitle: true,
       ),
       body: Container(
-          decoration: const BoxDecoration(color: Color(0xFFF8F8F8)),
-          child: ListView(
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
+        width: size.width,
+        decoration: const BoxDecoration(color: Colors.white),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Column(
-                    children: [
-                      const Text(
-                        'Бараа',
-                        style: TextStyle(
-                            fontSize: 36, fontWeight: FontWeight.bold),
-                      ),
-                      Container(
-                        height: MediaQuery.of(context).size.height,
-                        padding: const EdgeInsets.all(20),
-                        width: MediaQuery.of(context).size.width - 60,
-                        child: const CategoryWidget(),
-                      ),
-                    ],
-                  ),
-                ],
+              Container(
+                padding: const EdgeInsets.only(top: 40, bottom: 50),
+                width: size.width / 5 * 4,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      item.category + ' / ' + item.name,
+                      style: const TextStyle(color: Colors.grey, fontSize: 15),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: size.width / 10 * 2.5,
+                              height: size.width / 10 * 2.5,
+                              decoration: BoxDecoration(
+                                  border: Border.all(),
+                                  image: DecorationImage(
+                                      image: NetworkImage(item.img))),
+                            ),
+                            const SizedBox(
+                              width: 25,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  item.name,
+                                  style: const TextStyle(fontSize: 16),
+                                ),
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                Container(
+                                  height: 1,
+                                  width: size.width / 5 * 1.5,
+                                  decoration:
+                                      const BoxDecoration(color: Colors.grey),
+                                ),
+                                const SizedBox(
+                                  height: 6,
+                                ),
+                                Text(
+                                  item.price + ' ₮',
+                                  style: const TextStyle(
+                                      fontSize: 32,
+                                      fontWeight: FontWeight.w400),
+                                ),
+                                const SizedBox(
+                                  height: 6,
+                                ),
+                                Container(
+                                  height: 1,
+                                  width: size.width / 5 * 1.5,
+                                  decoration:
+                                      const BoxDecoration(color: Colors.grey),
+                                ),
+                                const SizedBox(
+                                  height: 6,
+                                ),
+                                Text(
+                                  item.description,
+                                  style: const TextStyle(fontSize: 15),
+                                ),
+                                InkWell(
+                                  child: Container(
+                                    height: 45,
+                                    width: 168,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5),
+                                        color: const Color(0xFF005497)),
+                                    child: const Center(
+                                      child: Text(
+                                        'Захиалах',
+                                        style: TextStyle(
+                                            fontSize: 20, color: Colors.white),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 17,
+                                ),
+                                const Text(
+                                  'Хэрхэн захиалах вэ?',
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                const Text(
+                                  'Дээрхи “Захиалах” товчин дээр даран messenger-ээр холбогдож\nэсвэл утсаар захиалгаа өгнө үү!',
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        Image.asset(
+                          'assets/shadowLogo.png',
+                          width: size.width / 10,
+                          height: size.width / 10,
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              Container(
+                width: size.width,
+                height: 1000,
+                decoration: const BoxDecoration(color: Color(0xFFF2F2F2)),
               )
             ],
-          )),
-    );
-  }
-}
-
-class CategoryWidget extends StatelessWidget {
-  const CategoryWidget({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<List<Item>>(
-      future: FirestoreService().getItems(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const LoadingScreen();
-        } else if (snapshot.hasError) {
-          return Center(
-            child: ErrorMessage(message: snapshot.error.toString()),
-          );
-        } else if (snapshot.hasData) {
-          var categories = snapshot.data!;
-
-          return Wrap(
-            children: categories
-                .map((category) => SalesCardWidget(item: category))
-                .toList(),
-          );
-        } else {
-          return const Text('No Category found in Firestore. Check database');
-        }
-      },
-    );
-  }
-}
-
-class SalesCardWidget extends StatelessWidget {
-  final Item item;
-  const SalesCardWidget({Key? key, required this.item}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.grey,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.25),
-            spreadRadius: 0,
-            blurRadius: 4,
-            offset: const Offset(0, 4), // changes position of shadow
           ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(5),
-            width: 230,
-            height: 320,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: NetworkImage(item.img), fit: BoxFit.cover)),
-          ),
-          Container(
-            decoration: const BoxDecoration(color: Colors.white),
-            padding: const EdgeInsets.all(5),
-            height: 80,
-            width: 230,
-            child: Column(
-              children: [
-                Text(
-                  item.name,
-                  style: const TextStyle(color: Colors.black, fontSize: 18),
-                ),
-                Text(
-                  item.price,
-                  style: const TextStyle(color: Colors.blue, fontSize: 18),
-                )
-              ],
-            ),
-          )
-        ],
+        ),
       ),
     );
   }
