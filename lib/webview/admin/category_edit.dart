@@ -176,7 +176,13 @@ class _CategoryEditScreenState extends State<CategoryEditScreen> {
                   const SizedBox(
                     height: 30,
                   ),
-                  Container(
+                  Text(widget.category.name,
+                      style: const TextStyle(
+                          fontSize: 21, fontWeight: FontWeight.bold)),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  SizedBox(
                     width: 400,
                     child: TextFormField(
                       maxLength: 20,

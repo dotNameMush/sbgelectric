@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sbgelectric/services/models.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProductDetailScreen extends StatelessWidget {
   final Item item;
@@ -94,6 +95,7 @@ class ProductDetailScreen extends StatelessWidget {
                                   style: const TextStyle(fontSize: 15),
                                 ),
                                 InkWell(
+                                  onTap: () => launch('http://m.me/sanjaa0403'),
                                   child: Container(
                                     height: 45,
                                     width: 168,

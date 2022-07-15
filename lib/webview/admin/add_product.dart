@@ -128,7 +128,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                               },
                               validator: (value) {
                                 if (value == null) {
-                                  return 'Бренд сонгоно уу!';
+                                  return 'Ангилал сонгоно уу!';
                                 } else {
                                   return null;
                                 }

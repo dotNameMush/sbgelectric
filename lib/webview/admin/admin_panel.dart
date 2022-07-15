@@ -41,6 +41,11 @@ class _AdminScreenState extends State<AdminScreen> {
       appBar: AppBar(
         title: const Text('Админ цэс'),
         centerTitle: true,
+        actions: [
+          IconButton(
+              onPressed: () => Navigator.pushNamed(context, '/'),
+              icon: const Icon(Icons.home))
+        ],
       ),
       drawer: Drawer(
         shape: const RoundedRectangleBorder(
